@@ -1,0 +1,166 @@
+CREATE DATABASE bankdb;
+USE bankdb;
+CREATE TABLE bankdb.customer (
+  user_id VARCHAR(10) NOT NULL,
+  first_name VARCHAR(30) NOT NULL,
+  last_name VARCHAR(30) NOT NULL,
+  birth_date DATE NOT NULL,
+  pin INT NOT NULL,
+  address VARCHAR(100) NOT NULL,
+  email VARCHAR(45) NOT NULL,
+  phone VARCHAR(10) NOT NULL,
+  PRIMARY KEY (user_id),
+  UNIQUE INDEX phone_UNIQUE (phone ASC) VISIBLE);
+
+CREATE TABLE deposits (
+  deposit_number varchar(10) NOT NULL,
+  scheme varchar(30) DEFAULT NULL,
+  open_date date DEFAULT NULL,
+  tenure int DEFAULT NULL,
+  deposit_amount double DEFAULT NULL,
+  maturity_date date DEFAULT NULL,
+  maturity_amount double DEFAULT NULL,
+  interest_rate float DEFAULT NULL,
+  balance double DEFAULT NULL,
+  user_id varchar(45) DEFAULT NULL,
+  PRIMARY KEY (deposit_number),
+  KEY user_id_idx (user_id),
+  CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES customer (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+);  
+
+CREATE TABLE bankdb.accounts (
+  account_number VARCHAR(10) NOT NULL,
+  user_id VARCHAR(45) NULL,
+  account_holder_name VARCHAR(45) NULL,
+  account_type VARCHAR(45) NULL,
+  balance DOUBLE NULL,
+  nominee VARCHAR(45) NULL,
+  PRIMARY KEY (account_number),
+  INDEX user_id_idx (user_id ASC) VISIBLE,
+  CONSTRAINT userID
+    FOREIGN KEY (user_id)
+    REFERENCES bankdb.customer (user_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+CREATE TABLE bankdb.transactions (
+  transaction_id INT NOT NULL,
+  account_number VARCHAR(45) NULL,
+  amount DOUBLE NULL,
+  date DATE NULL,
+  time TIME NULL,
+  description VARCHAR(50) NULL,
+  PRIMARY KEY (transaction_id),
+  INDEX account_no_idx (account_number ASC) VISIBLE,
+  CONSTRAINT account_no
+    FOREIGN KEY (account_number)
+    REFERENCES bankdb.accounts (account_number)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+CREATE TABLE bankdb.insurance (
+  policy_number VARCHAR(10) NOT NULL,
+  date_of_issue DATE NULL,
+  monthly_due_day INT NULL,
+  policy_type VARCHAR(45) NULL,
+  policy_term INT NULL,
+  user_id VARCHAR(45) NULL,
+  PRIMARY KEY (policy_number),
+  INDEX userID_policy_idx (user_id ASC) VISIBLE,
+  CONSTRAINT userID_policy
+    FOREIGN KEY (user_id)
+    REFERENCES bankdb.customer (user_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+  
+CREATE TABLE bankdb.cards (
+  card_number VARCHAR(20) NOT NULL PRIMARY KEY,
+  account_number VARCHAR(10) NOT NULL,
+  type VARCHAR(10) NOT NULL,
+  pin INT NOT NULL,
+  cvv INT NOT NULL,
+  expiry_date DATE NOT NULL,
+  account_holder_name VARCHAR(10) NOT NULL,
+  CONSTRAINT account_no_card
+    FOREIGN KEY (account_number)
+    REFERENCES bankdb.accounts (account_number)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+
+
+
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('ray11', 'Ray ', 'Shetty', '1973-11-04', '1234', 'No.3, Park Lane,chennai-60', 'rayshetty@gmail.com', '9047692011');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('raj', 'Raja', 'Varma', '1980-03-11', '1234', 'No. 5, Richardson street,chennai-53', 'raja11@gmail.com', '9047692311');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('abhi', 'Abhinaya', 'Ravikumar', '1998-11-11', '5678', 'No.2, School Road, Anna Nahar, Chennai-44', 'abhinaya@yahoo.co.in', '9597850450');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('bhanu', 'Bhavanya', 'S', '2000-11-23', '5678', 'No.5,Park Avenue,Mumbai-33', 'bhanu23@gmail.com', '9789832011');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('cathy', 'Cathy', 'Teresea', '1995-09-15', '1234', 'No13b, lux street,Mylapore,Chennai-89', 'cathyteresea@yahoo.co.in', '9047692033');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('david', 'David', 'Theophus', '2001-01-03', '7890', 'No.12, KSR Road, Ambattur, chennai-53', 'davidtheo@gmail.com', '9597840440');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('elisa', 'Elisa', 'Sky', '2002-01-11', '1234', 'No.4, Beach road, Mahabalipuram,chennai-23', 'sky@gmail.com', '9500050319');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('gowri', 'Gowri', 'Priya', '1995-12-22', '1234', 'No.23, Jeevarathinam street,Adyar,chennai-50', 'gowripriya22@gmail.com', '9500050219');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('riya', 'Riya', 'Anand', '1998-11-15', '5678', 'No.14/11, Swiss Lane, Bangalore -55', 'iamriya@gmail.com', '9597450750');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('jake', 'Jake', 'Grayson', '2005-11-11', '1234', 'No.3, School Road, Egmore, chennai-21', 'mrgray@gmail.com', '9789832055');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('lohita', 'Lohita', 'Sanam', '2001-02-02', '1234', 'No.221,Old bakharva rd, Pune-23', 'lohi@gmail.com', '9047652011');
+INSERT INTO bankdb.customer (user_id, first_name, last_name, birth_date, pin, address, email, phone) VALUES ('virat', 'Virat', 'Singh', '1996-12-23', '1234', 'No.22, Park road, Bangalore - 34', 'virat23@gmail.com', '9788627898');
+
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045164', 'ray11', 'Ray Shetty', 'Savings', '50000.00', 'Anita Shetty');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045122', 'raj', 'Raja Varma', 'Current', '30000.00', 'Ravi');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045166', 'cathy', 'Cathy Teresea', 'Savings', '100000', 'Raymond Cavendish');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045167', 'david', 'David Theophus', 'Current', '400000', 'Reyna Theophus');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045168', 'elisa', 'Elisa Sky', 'Savings', '250000', 'Jack Sky');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045169', 'gowri', 'Gowri Priya', 'Savings', '135000', 'Aravind K');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045170', 'jake', 'Jake Grayson', 'Savings', '2500000', 'Melissa Grayson');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045171', 'lohita', 'Lohita Sanam', 'Savings', '1150000', 'Aashiq Sanam');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045172', 'abhi', 'Abhinaya Ravikumar', 'Current', '1500234', 'Ravikumar Ashwin');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045173', 'bhanu', 'Bhavanya S', 'Savings', '2345000', 'Rahul Sandeep');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045174', 'riya', 'Riya Anand', 'Savings', '2500000', 'Harish Anand');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045175', 'virat', 'Virat Singh', 'Savings', '100230', 'Ananya Singh');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045176', 'elisa', 'Elisa Sky', 'Current', '25000', 'Jack Sky');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045177', 'abhi', 'Abhinaya Ravikumar', 'Savings', '100500', 'Ravikumar Ashwin');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045178', 'ray11', 'Ray Shetty', 'Savings', '230000', 'Anita Shetty');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045179', 'lohita', 'Lohita Sanam', 'Current', '10000', 'Aashiq Sanam');
+INSERT INTO bankdb.accounts (account_number, user_id, account_holder_name, account_type, balance, nominee) VALUES ('1000045180', 'riya', 'Riya Anand', 'Savings', '23000', 'Harish Anand');
+
+
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('1427596345', '2016-03-22', '22', 'Lombard Motor', '10 ', 'raj');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('1556M58960', '2000-09-12', '12', 'Jeevan Lakshya', '20 ', 'abhi');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('3564M59557', '2012-04-20', '20', 'Star Health', '30 ', 'abhi');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('AUT9345378', '2017-03-15', '15', 'Lombard Car', '10 ', 'abhi');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('5469M03452', '2015-09-12', '12', 'Jeevan Lakshya', '20 ', 'bhanu');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('AUT9841037', '2020-07-22', '22', 'AAA Motor', '15 ', 'bhanu');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('P161117012', '2013-05-02', '02', 'Start Health', '30 ', 'cathy');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('3257A15380', '2021-01-05', '05', 'AIG Life', '20 ', 'david');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('AA34589023', '2009-01-08', '08', 'MAX Life', '20 ', 'david');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('90123B8976', '2001-04-04', '04', 'Lombard Bike', '10 ', 'elisa');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('1267M90341', '2005-01-10', '10', 'Jeevan Lakshya', '20 ', 'elisa');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('D123456789', '2007-09-03', '03', 'AIG Life', '20 ', 'elisa');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('7245M15749', '2009-05-18', '18', 'MAX Life', '20 ', 'gowri');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('1254796584', '2020-01-20', '20', 'Jeevan Lakshya', '20 ', 'riya');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('7548Q89654', '2021-03-18', '18', 'Lombard Car', '10 ', 'riya');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('7249543887', '2011-03-18', '18', 'Star Health', '30 ', 'riya');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('4521S89456', '2019-08-15', '15', 'AAA Motor', '15 ', 'riya');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('8542XX3296', '2003-03-03', '03', 'Jeevan Lakshya', '20 ', 'jake');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('WDE486521', '2005-08-04', '04', 'Lombard Car', '10 ', 'lohita');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('QS75964213', '2011-10-12', '12', 'Jeevan Lakshya', '20 ', 'virat');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('LIF7542986', '2012-11-19', '19', 'Star Health', '30 ', 'virat');
+INSERT INTO bankdb.insurance (policy_number, date_of_issue, monthly_due_day, policy_type, policy_term, user_id) VALUES ('1356M58955', '2020-09-12', '12', 'Jeevan Lakshya', '20 ', 'ray11');
+
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('128456', '1000045166', '750.00', '2021-03-10', '16:00:12', 'Swiggy');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('128753', '1000045167', '3000.00', '2021-03-12', '10:18:22', 'Amazon');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('284596', '1000045168', '1500.00', '2021-03-15', '08:05:13', 'Dominos');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('307542', '1000045169', '420.00', '2021-03-19', '17:01:28', 'Books');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('357428', '1000045170', '1574.00', '2021-03-25', '16:01:45', 'Nilgiris');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('396451', '1000045171', '700.00', '2021-03-28', '13:12:45', 'Exam Fees');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('418456', '1000045172', '1850.00', '2021-04-02', '18:00:00', 'Pizza Hut');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('451823', '1000045175', '155.00', '2021-04-12', '16:02:05', 'Gift Shop');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('475123', '1000045177', '1200.00', '2021-04-15', '13:54:05', 'Myntra');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('501742', '1000045180', '200.00', '2021-04-22', '13:04:03', 'Grocery');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('126534', '1000045122', '1000.00', '2021-04-10', '20:13:44', 'Swiggy');
+INSERT INTO bankdb.transactions (transaction_id, account_number, amount, date, time, description) VALUES ('123322', '1000045164', '500', '2021-04-11', '15:23:33', 'Nilgiris Supermarket');
+
+INSERT INTO bankdb.deposits (deposit_number, scheme, open_date, tenure, deposit_amount, maturity_date, maturity_amount, interest_rate, balance, user_id) VALUES ('12345557', 'SDR', '2021-04-26', '12', '50000', '2022-04-26', '52755.117', '5.4', '50000', 'david');
+INSERT INTO bankdb.deposits (deposit_number, scheme, open_date, tenure, deposit_amount, maturity_date, maturity_amount, interest_rate, balance, user_id) VALUES ('12345559', 'SDR', '2021-04-26', '24', '35000', '2023-04-26', '38963.51', '5.4', '35000', 'jake');
+INSERT INTO bankdb.deposits (deposit_number, scheme, open_date, tenure, deposit_amount, maturity_date, maturity_amount, interest_rate, balance, user_id) VALUES ('12345560', 'RDP', '2021-04-26', '12', '60000', '2022-04-26', '63212.56', '5.25', '60000', 'jake');
+INSERT INTO bankdb.deposits (deposit_number, scheme, open_date, tenure, deposit_amount, maturity_date, maturity_amount, interest_rate, balance, user_id) VALUES ('12345561', 'RDP', '2021-04-26', '12', '25000', '2022-04-26', '26338.57', '5.25', '25000', 'gowri');
+INSERT INTO bankdb.deposits (deposit_number, scheme, open_date, tenure, deposit_amount, maturity_date, maturity_amount, interest_rate, balance, user_id) VALUES ('12345562', 'SDR', '2021-05-26', '24', '45000', '2023-04-26', '50095.94', '5.4', '45000', 'virat');
